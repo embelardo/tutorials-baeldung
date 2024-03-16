@@ -1,0 +1,78 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "remoting-http",
+  "steps": [
+    {
+      "file": "remoting-http-api/src/main/java/com/baeldung/api/CabBookingService.java",
+      "description": "This `interface` defines a remotely callable service.\n- It allows Spring to create *proxies* at both client and server side that encapsulate the plumbing of the remote call.",
+      "line": 3,
+      "title": "remoting-http-api - CabBookingService.java"
+    },
+    {
+      "file": "remoting-http-api/src/main/java/com/baeldung/api/CabBookingService.java",
+      "description": "When the service:\n- Is able to allocate a cab, it returns a `Booking` object with a reservation code.\n- Is unable to allocate a cab, it throws a `BookingException`.\n\nBoth the `Booking` class and the `Exception` base class is serializable, which is required for the remote call.",
+      "line": 4,
+      "title": "remoting-http-api - CabBookingService.java"
+    },
+    {
+      "file": "remoting-http-server/pom.xml",
+      "description": "The *Spring Boot* requirement of this project is fulfilled here.",
+      "line": 19,
+      "title": "remoting-http-server - pom.xml"
+    },
+    {
+      "file": "remoting-http-server/pom.xml",
+      "description": "The *service definition* is pulled in here.\n- The accompanying article mistakenly refers to this module as `artifactId=api` instead of `artifactId=remoting-http-api`, as it appears in this `pom.xml` file.",
+      "line": 23,
+      "title": "remoting-http-server - pom.xml"
+    },
+    {
+      "file": "remoting-http-server/src/main/java/com/baeldung/server/CabBookingServiceImpl.java",
+      "description": "This is the *server-side implementation* of the *callable service*.",
+      "line": 10,
+      "title": "remoting-http-server - CabBookingServiceImpl.java"
+    },
+    {
+      "file": "remoting-http-server/src/main/java/com/baeldung/server/Server.java",
+      "description": "Through `HttpInvokerServiceExporter`, this web application exposes an *HTTP entry point* to clients.",
+      "line": 14,
+      "title": "remoting-http-server - Server.java"
+    },
+    {
+      "file": "remoting-http-server/src/main/java/com/baeldung/server/Server.java",
+      "description": "Spring's *HTTP invokder* uses the `name` of the `HttpInvokerServiceExporter` bean as a relative path for the *HTTP endpoint URL*.",
+      "line": 16,
+      "title": "remoting-http-server - Server.java"
+    },
+    {
+      "file": "remoting-http-server/src/main/java/com/baeldung/server/Server.java",
+      "description": "Start the server application here, or use the *Server* run configuration in IntelliJ.",
+      "line": 23,
+      "title": "remoting-http-server - Server.java"
+    },
+    {
+      "file": "remoting-http-client/src/main/java/com/baeldug/client/Client.java",
+      "description": "This `@Bean` annotated `invoker()` method creates an instance of `HttpInvokerProxyFactoryBean`.\n\n`HttpInvokerProxyFactoryBean` implements Spring's `FactoryBean`.\nA `FactoryBean` is defined as a bean, but the Spring IoC container will inject *the object it creates* instead of the factory itself.",
+      "line": 16,
+      "title": "remoting-http-client - Client.java"
+    },
+    {
+      "file": "remoting-http-client/src/main/java/com/baeldug/client/Client.java",
+      "description": "The URL that the remote server responds at must be specified, and this is done through the `setServiceUrl()` method.",
+      "line": 18,
+      "title": "remoting-http-client - Client.java"
+    },
+    {
+      "file": "remoting-http-client/src/main/java/com/baeldug/client/Client.java",
+      "description": "The interface of the service to be invoked must also be specified, and this is done through the `setServiceInterface()` method.",
+      "line": 19,
+      "title": "remoting-http-client - Client.java"
+    },
+    {
+      "file": "remoting-http-client/src/main/java/com/baeldug/client/Client.java",
+      "description": "The `main()` method:\n- Bootstraps the standalone application.\n- Obtains an instance of `CabBookingService` from the Spring context,\n  which is actually a *proxy* created by `HttpInvokerProxyFactoryBean` that contains the plumbing necessary to execute remote invocations.\n  The proxy can be used as if the service were locally available!\n\nTesting:\n- Cab booking successful:\n```shell\nRide confirmed: code '8014d4e2-c4cd-4f38-b8f8-245b46823c3c'.\n```\n\n- Cab booking unsuccessful:\n```shell\nException in thread \"main\" com.baeldung.api.BookingException: Cab unavailable\n\tat com.baeldung.server.CabBookingServiceImpl.bookRide(CabBookingServiceImpl.java:13)\n\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\t...\n```",
+      "line": 23,
+      "title": "remoting-http-client - Client.java"
+    }
+  ]
+}
