@@ -1,0 +1,36 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "remoting-hessian-burlap",
+  "steps": [
+    {
+      "file": "remoting-hessian-burlap-client/pom.xml",
+      "description": "Both the *client and server side* of this *Hessian/Burlap backed RMI solution* require the **Hessian/Burlap library**.",
+      "line": 35
+    },
+    {
+      "file": "remoting-hessian-burlap-server/pom.xml",
+      "description": "Both the *client and server side* of this *Hessian/Burlap backed RMI solution* require the **Hessian/Burlap library**.",
+      "line": 29
+    },
+    {
+      "file": "remoting-hessian-burlap-server/pom.xml",
+      "description": "[Hessian Binary Web Service Protocol | Caucho](https://tinyl.io/ATHa)\n- Latest version of Java Hessian Download is hessian-4.0.60.jar (2 Feb 2019)",
+      "line": 48
+    },
+    {
+      "file": "remoting-hessian-burlap-server/src/main/java/com/baeldung/server/Server.java",
+      "description": "The *Spring Remoting* service is exposed through a `RemoteExporter` of type `HessianServiceExporter`, which replaces the `HttpInvokerServiceExporter` used in the *remoting-http* tutorial.\n\n```java\n@Configuration\n@ComponentScan\n@EnableAutoConfiguration\npublic class Server {\n\n    @Bean(name = \"/booking\") HttpInvokerServiceExporter accountService() {\n        HttpInvokerServiceExporter exporter = new HttpInvokerServiceExporter();\n        exporter.setService( new CabBookingServiceImpl() );\n        exporter.setServiceInterface( CabBookingService.class );\n        return exporter;\n    }\n\n    public static void main(String[] args) {\n        SpringApplication.run(Server.class, args);\n    }\n\n}\n```",
+      "line": 26
+    },
+    {
+      "file": "remoting-hessian-burlap-client/src/main/java/com/baeldung/client/HessianClient.java",
+      "description": "The `@Bean` annotated `hessianInvoker()` method creates an instance of `HessianProxyFactoryBean`, which replaces the `HttpInvokerProxyFactoryBean` used in the *remoting-http* tutorial.\n\n```java\n    @Bean\n    public HttpInvokerProxyFactoryBean invoker() {\n        HttpInvokerProxyFactoryBean invoker = new HttpInvokerProxyFactoryBean();\n        invoker.setServiceUrl(\"http://localhost:8080/booking\");\n        invoker.setServiceInterface(CabBookingService.class);\n        return invoker;\n    }\n```",
+      "line": 21
+    },
+    {
+      "file": "remoting-hessian-burlap-client/src/main/java/com/baeldung/client/HessianClient.java",
+      "description": "Apart from the difference between the Spring `HttpInvokerXxx` vs. `HessianXxx` code sets, the rest of the client code in the `main()` method is the same as in the *remoting-http* tutorial.\n\nThe `main()` method:\n- Bootstraps the standalone application.\n- Obtains an instance of `CabBookingService` from the Spring context, which is actually a *proxy* created by `HessianProxyFactoryBean` that contains the plumbing necessary to execute remote invocations. The proxy can be used as if the service where locally available!\n\nTesting:\n- Cab booking successful:\n\n```shell\nRide confirmed: code '24ca4549-6b6f-4597-9da5-80e50ea778ad'.\n```\n\n- Cab booking unsuccessful:\n\n```shell\nException in thread \"main\" com.baeldung.api.BookingException: Cab unavailable\n\tat com.baeldung.server.CabBookingServiceImpl.bookRide(CabBookingServiceImpl.java:13)\n\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\t...\n```\n",
+      "line": 26
+    }
+  ]
+}
